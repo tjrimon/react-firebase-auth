@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import app from '../firebase.init';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
 
 const Login = () => {
     const [email, setEmail] = useState([]);
@@ -25,11 +25,13 @@ const Login = () => {
                     setError(err.message)
                 })
         }
+        updateUserProfile()
         e.preventDefault()
         setError('')
     }
     const handleNameBlur = (e) => {
         setName(e.target.value)
+        console.log(e.target.value)
     }
     const handleEmailBlur = (e) => {
         setEmail(e.target.value)
@@ -40,9 +42,15 @@ const Login = () => {
     const handlePasswordBlur = (e) => {
         setPassword(e.target.value)
     }
+    const updateUserProfile = () => {
+        updateProfile(auth.currentUser, {
+            displayName: name,
+        }).then(data => console.log(data)).catch(err => console.log(err))
+    }
     return (
         <main className=''>
             <div className='h-[90vh] flex justify-center items-center'>
+
                 <form className='w-96 bg-pink-100 py-10 px-10 rounded-lg'>
                     <h1 className='pb-3 font-semibold text-xl '>{registered ? 'Login ' : 'Register '}Here</h1>
                     {!registered && <div className="">
